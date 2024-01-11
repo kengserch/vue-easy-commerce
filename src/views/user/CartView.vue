@@ -1,4 +1,5 @@
 <script setup>
+import { RouterLink } from 'vue-router';
 import UserLayout from '@/layouts/UserLayout.vue'
 import Close from '@/components/icons/Close.vue'
 import { useCartStore } from '@/stores/user/cart'
@@ -22,7 +23,7 @@ const changeQuantity = (event, index) =>{
         </div>
         <div v-else class="flex" v-for="(item,index) in cartStore.items" :key="index">
           <div class="flex-1">
-            <img class="w-full p-5" src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg">
+            <img class="w-full p-5" :src="item.imageUrl">
           </div>
           <div class="flex-1">
             <div class="flex flex-col justify-between h-full">
@@ -34,7 +35,7 @@ const changeQuantity = (event, index) =>{
                     <div>{{item.price}}</div>
                   </div>
                   <div>
-                    <select class=" w-1/2 p-4 rounded-full" @change="changeQuantity($event,index)">
+                    <select v-model="item.quantity" class=" w-1/2 p-4 rounded-full" @change="changeQuantity($event,index)">
                       <option v-for="(quantity,index) in [1, 2, 3, 4, 5]" :key="index">
                         {{ quantity }}
                       </option>
@@ -67,6 +68,7 @@ const changeQuantity = (event, index) =>{
             <div>ราคารวมทั้งหมด</div>
             <div>{{ cartStore.summaryPrice  }}</div>
           </div>
+          <RouterLink :to="{name:'checkout'}" class="btn btn-neutral w-full mt-4">ชำระเงิน</RouterLink>
         </div>
       </div>
     </div>

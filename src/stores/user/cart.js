@@ -2,17 +2,8 @@ import { defineStore } from "pinia";
 
 export const useCartStore = defineStore('cart', {
     state: () => ({
-        items:[
-            {
-                name: 'test',
-                imageUrl: 'https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg',
-                quantity: 10,
-                about: 'test1',
-                status: 'open',
-                price: 100,
-                quantity:1
-            }
-        ]
+        items:[],
+        checkout:{}
     }),
     getters:{
         summaryQuantity(state) {
@@ -25,14 +16,50 @@ export const useCartStore = defineStore('cart', {
         }
     },
     actions:{
+        loadCart () {
+            const previousCart = localStorage.getItem('cart-data')
+            if(previousCart){
+                this.items = JSON.parse(previousCart)
+            }
+        },
         addToCart (ProductData) {
-            this.items.push(ProductData)
+            const findProductIndex = this.items.findIndex(item => {
+                return item.name === ProductData.name
+            })
+            if(findProductIndex < 0){
+                ProductData.quantity = 1
+                this.items.push(ProductData)
+            }else{
+                const currentItem = this.items[findProductIndex]
+
+                this.updateQuantity(findProductIndex, currentItem.quantity+1)
+            }
+            localStorage.setItem('cart-data', JSON.stringify(this.items))
         },
         updateQuantity (index, quantity) {
             this.items[index].quantity = quantity
+            localStorage.setItem('cart-data', JSON.stringify(this.items))
         },
         removeItemIncart (index) {
             this.items.splice(index,1)
+            localStorage.setItem('cart-data', JSON.stringify(this.items))
+        },
+        placeOrder (userData){
+            const orderData = {
+                ...userData,
+                totalPrice: this.summaryPrice,
+                paymentMethod : 'Credit Card',
+                createdDate : (new Date()).toLocaleString(),
+                orderNumber : `AA${ Math.floor((Math.random()*90000)+10000)}`,
+                products: this.items
+            }
+            localStorage.setItem('order-data', JSON.stringify(orderData))
+        },
+        loadCheckout(){
+            const orderData = localStorage.getItem('order-data')
+            if(orderData){
+               this.checkout = JSON.parse(orderData)
+            }
         }
     }
 })
