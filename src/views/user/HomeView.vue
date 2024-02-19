@@ -22,8 +22,8 @@ const addToCart = (product) => {
     <div class="hero h-96 bg-base-200">
       <div class="hero-content text-center">
         <div class="max-w-md">
-          <h1 class="text-5xl font-bold">Welcome to Shop</h1>
-          <p class="py-6">Trust your intuition!</p>
+          <h1 class="text-4xl font-bold text-white">Welcome to Sneaker Shop</h1>
+          <p class="py-6 text-white">Trust your intuition!</p>
         </div>
       </div>
     </div>
