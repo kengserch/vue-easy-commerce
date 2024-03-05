@@ -17,7 +17,6 @@ const cartStore = useCartStore()
 
 const searchText = ref('')
 
-
 watch(() => route.query.q, (newSearchText) => {
   searchText.value = newSearchText
 }, {immediate: true})
@@ -42,5 +41,8 @@ const addToCart = (product) => {
     :addToCart="addToCart"
     >
     </Product>
+
+    <div v-if="filterProducts == '' " class="text-center my-20"> <b class="text-4xl"> No Product Data Found !</b> </div>
+
   </UserLayout>
 </template>

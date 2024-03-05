@@ -7,6 +7,7 @@ import CheckoutView from '@/views/user/CheckoutView.vue'
 import ProfileView from '@/views/user/ProfileView.vue'
 import SearchView from '@/views/user/SearchView.vue'
 import SuccessView from '@/views/user/SuccessView.vue'
+import ProductDetail from '@/views/user/ProductDetail.vue'
 
 
 
@@ -17,6 +18,11 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView
+    },
+    {
+      path: '/product/:id',
+      name: 'product-detail',
+      component: ProductDetail
     },
     {
       path: '/cart',
