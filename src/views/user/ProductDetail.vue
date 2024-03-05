@@ -2,17 +2,22 @@
 
 //config
 import { onMounted, ref, computed } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 //layout
 import UserLayout from '@/layouts/UserLayout.vue'
 //store
 import { useProductStore } from '@/stores/user/product';
-
+import { useCartStore } from '@/stores/user/cart';
 
 const productStore = useProductStore()
+const cartStore = useCartStore()
 const route = useRoute()
+const router = useRouter()
 
-
+const addToCart = (product) => {
+    cartStore.addToCart(product)
+     router.push({ name:'cart'})
+}
 
 const selectedProducts = computed(() => {
     return productStore.loadProduct(route.params.id)
@@ -45,6 +50,7 @@ const selectedProducts = computed(() => {
                     minima natus iusto necessitatibus consequuntur laudantium recusandae laborum voluptatibus vero quasi
                     accusamus, eius reprehenderit rem.</p>
             </div>
+            <button class="btn btn-primary" @click="addToCart(selectedProducts)">Buy Now</button>
         </div>
 
     </UserLayout>
