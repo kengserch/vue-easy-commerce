@@ -32,7 +32,7 @@ const changeQuantity = (event, index) =>{
                   <div>
                     <div><b>{{item.name}}</b></div>
                     <div>{{item.about}}</div>
-                    <div>{{item.price}}</div>
+                    <div>{{item.price}} ฿</div>
                   </div>
                   <div>
                     <select v-model="item.quantity" class=" w-1/2 p-4 rounded-full cursor-pointer" @change="changeQuantity($event,index)">
@@ -58,15 +58,15 @@ const changeQuantity = (event, index) =>{
         <div class="my-4 divide-y divide-zinc-300">
           <div class="flex justify-between py-2 text-black">
             <div>ราคาสินค้าทั้งหมด</div>
-            <div>{{ cartStore.summaryPrice }}</div>
+            <div>{{ cartStore.summaryPrice }} ฿</div>
           </div>
           <div class="flex justify-between py-2 text-black">
             <div>ค่าส่ง</div>
-            <div>0</div>
+            <div>0 ฿</div>
           </div>
           <div class="flex justify-between py-2 text-black">
             <div>ราคารวมทั้งหมด</div>
-            <div>{{ cartStore.summaryPrice  }}</div>
+            <div>{{ cartStore.summaryPrice  }} ฿</div>
           </div>
           <RouterLink :to="{name:'checkout'}" class="btn btn-neutral w-full mt-4">ชำระเงิน</RouterLink>
         </div>

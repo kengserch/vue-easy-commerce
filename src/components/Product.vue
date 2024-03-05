@@ -24,6 +24,7 @@ defineProps({
                     <h2 class="card-title font-bold">{{ product.name }}</h2>
                     <p class="font-medium">{{ product.about }}</p>
                     <p class="font-medium">฿ {{ product.price }}</p>
+                    <p class="font-medium">Color : {{ product.color }}</p>
                 </RouterLink>
                     <div class="card-actions justify-end">
                         <button class="btn btn-primary" @click="addToCart(product)">Buy Now</button>

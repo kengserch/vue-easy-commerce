@@ -89,17 +89,17 @@ const payment = () => {
           <div><b>Order Summary</b></div>
           <div class="flex justify-between">
             <div>ราคาสินค้าทั้งหมด</div>
-            <div>{{ cartStore.summaryPrice }}</div>
+            <div>{{ cartStore.summaryPrice }} ฿</div>
           </div>
           <div class="flex justify-between">
             <div>ค่าส่ง</div>
-            <div>0</div>
+            <div>0 ฿</div>
           </div>
         </div>
         <div class="divider"></div>
         <div class="flex justify-between p-4 mb-4 text-black">
           <div>ราคาทั้งหมด</div>
-          <div>{{ cartStore.summaryPrice }}</div>
+          <div>{{ cartStore.summaryPrice }} ฿</div>
         </div>
       </section>
     </div>

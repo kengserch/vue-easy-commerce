@@ -29,13 +29,10 @@ const selectedProducts = computed(() => {
 <template>
     <UserLayout>
         <div class="text-2xl text-center">Product Detail</div>
-        <div class="text-4xl text-center">{{ selectedProducts.name }} </div>
+        <div class="text-4xl text-center underline">{{ selectedProducts.name }} </div>
 
         <div class="flex my-10">
             <div class="flex">
-                <figure>
-                    <img class=" w-[500px] h-auto" :src="selectedProducts.imageUrl" />
-                </figure>
                 <figure>
                     <img class=" w-[500px] h-auto" :src="selectedProducts.imageUrl" />
                 </figure>
@@ -44,11 +41,7 @@ const selectedProducts = computed(() => {
                 <p class="font-bold text-2xl">{{ selectedProducts.name }}</p>
                 <p class="font-normal text-lg">{{ selectedProducts.about }}</p>
                 <p class="font-normal text-lg">฿ {{ selectedProducts.price }}</p>
-                <p class="font-light text-sm w-[40rem]">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos
-                    adipisci repellat doloribus unde alias. Exercitationem quis libero atque! Dolorum porro illo maxime
-                    minima nulla. Atque natus recusandae corporis fuga dolorum! Cumque commodi est, similique labore
-                    minima natus iusto necessitatibus consequuntur laudantium recusandae laborum voluptatibus vero quasi
-                    accusamus, eius reprehenderit rem.</p>
+                <p class="font-light text-sm w-[40rem] mt-4">{{selectedProducts.description}}</p>
             </div>
             <button class="btn btn-primary" @click="addToCart(selectedProducts)">Buy Now</button>
         </div>

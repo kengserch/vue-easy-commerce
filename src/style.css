@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .hero{
-    background: rgba(0, 0, 0, .65) url('https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?q=80&w=1925&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+    background: rgba(0, 0, 0, .65) url('https://www.newbalance.com/dw/image/v2/AAGI_PRD/on/demandware.static/-/Library-Sites-NBUS-NBCA/default/dw727fec9c/images/page-designer/2024/February/16191_Comp_A_Desktop.jpg?sw=1616&sfrm=jpg');
     background-position: center; /* Center the image */
     background-repeat: no-repeat; /* Do not repeat the image */
     background-size: cover; /* Resize the background image to cover the entire container */
