@@ -31,7 +31,7 @@ const updateProfile = () => {
   }
   localStorage.setItem('profile-data', JSON.stringify(profileData))
   alert('Success Update Profile!')
-  router.go(0)
+  window.location.reload()
 } 
 
 onMounted(()=>{

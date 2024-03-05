@@ -11,7 +11,7 @@ const router = useRouter()
 const isLoggedIn = ref(false)
 const searchText = ref('')
 
-const profileImageUrl = ref('')
+const profileImageUrl = ref('https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg')
 const name = ref('')
 
 
