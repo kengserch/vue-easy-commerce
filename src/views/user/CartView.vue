@@ -35,14 +35,14 @@ const changeQuantity = (event, index) =>{
                     <div>{{item.price}}</div>
                   </div>
                   <div>
-                    <select v-model="item.quantity" class=" w-1/2 p-4 rounded-full" @change="changeQuantity($event,index)">
+                    <select v-model="item.quantity" class=" w-1/2 p-4 rounded-full cursor-pointer" @change="changeQuantity($event,index)">
                       <option v-for="(quantity,index) in [1, 2, 3, 4, 5]" :key="index">
                         {{ quantity }}
                       </option>
                     </select>
                   </div>
                   <div @click="cartStore.removeItemIncart(index)" class="absolute top-1 right-0">
-                    <Close></Close>
+                    <Close class="fill-white cursor-pointer"></Close>
                   </div>
                 </div>
               </div>
@@ -54,17 +54,17 @@ const changeQuantity = (event, index) =>{
         </div>
       </div>
       <div class="flex-auto w-32 bg-slate-200 p-4">
-        <div class="text-xl font-bold">Order Summary</div>
+        <div class="text-xl font-bold text-black">Order Summary</div>
         <div class="my-4 divide-y divide-zinc-300">
-          <div class="flex justify-between py-2">
+          <div class="flex justify-between py-2 text-black">
             <div>ราคาสินค้าทั้งหมด</div>
             <div>{{ cartStore.summaryPrice }}</div>
           </div>
-          <div class="flex justify-between py-2">
+          <div class="flex justify-between py-2 text-black">
             <div>ค่าส่ง</div>
             <div>0</div>
           </div>
-          <div class="flex justify-between py-2">
+          <div class="flex justify-between py-2 text-black">
             <div>ราคารวมทั้งหมด</div>
             <div>{{ cartStore.summaryPrice  }}</div>
           </div>

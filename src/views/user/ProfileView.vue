@@ -1,6 +1,10 @@
 <script setup>
-import { ref , onMounted } from 'vue';
+import { ref , onMounted,  } from 'vue';
+import { useRouter } from 'vue-router'
 import UserLayout from '@/layouts/UserLayout.vue'
+
+
+const router = useRouter()
 
 const profileImageUrl = ref('https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg')
 const email = ref('')
@@ -27,6 +31,7 @@ const updateProfile = () => {
   }
   localStorage.setItem('profile-data', JSON.stringify(profileData))
   alert('Success Update Profile!')
+  router.go(0)
 } 
 
 onMounted(()=>{

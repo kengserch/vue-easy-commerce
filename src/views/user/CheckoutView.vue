@@ -1,6 +1,6 @@
 <script setup>
 import { reactive } from "vue";
-import { RouterLink , useRouter } from "vue-router"
+import { RouterLink, useRouter } from "vue-router"
 
 import UserLayout from "@/layouts/UserLayout.vue";
 
@@ -10,15 +10,15 @@ import { useCartStore } from '@/stores/user/cart'
 
 const FormData = [
   {
-    name: 'Email address',
+    name: '*Email address',
     field: 'email'
   },
   {
-    name: 'Name',
+    name: '*Name',
     field: 'name'
   },
   {
-    name: 'Address',
+    name: '*Address',
     field: 'address'
   }
   ,
@@ -39,8 +39,14 @@ const userFormData = reactive({
 })
 
 const payment = () => {
+
+  if (userFormData.email == '' || userFormData.name == '' || userFormData.address == '') {
+    return alert("โปรดกรอกข้อมูลให้ครบ");
+
+  }
+
   cartStore.placeOrder(userFormData)
-  router.push({name:'success'})
+  router.push({ name: 'success' })
 }
 
 </script>
@@ -52,7 +58,7 @@ const payment = () => {
       <section class="flex-auto w-64 bg-base-200 p-8">
         <label v-for="form in FormData" :key="form.field" class="form-control w-full">
           <div class="label">
-            <span class="label-text">{{ form.name }}</span>
+            <span class="label-text ">{{ form.name }}</span>
           </div>
           <textarea v-if="form.field === 'address'" v-model="userFormData[form.field]" class="textarea"
             :placeholder="form.name"></textarea>
@@ -67,17 +73,19 @@ const payment = () => {
             <img class="w-full p-4" :src="item.imageUrl">
           </div>
           <div class="flex-1">
-            <div class="flex flex-col justify-between h-full">
+            <div class="flex flex-col justify-between h-full text-black">
               <div>
                 <div><b>{{ item.name }}</b></div>
                 <div>จำนวน : {{ item.quantity }}</div>
               </div>
-              <RouterLink :to="{ name: 'cart' }">Edit</RouterLink>
+              <div class="self-end mr-4">
+                <RouterLink :to="{ name: 'cart' }" class="btn w-16">Edit</RouterLink>
+              </div>
             </div>
           </div>
         </div>
         <div class="divider"></div>
-        <div class="p-4">
+        <div class="p-4 text-black">
           <div><b>Order Summary</b></div>
           <div class="flex justify-between">
             <div>ราคาสินค้าทั้งหมด</div>
@@ -89,7 +97,7 @@ const payment = () => {
           </div>
         </div>
         <div class="divider"></div>
-        <div class="flex justify-between p-4 mb-4">
+        <div class="flex justify-between p-4 mb-4 text-black">
           <div>ราคาทั้งหมด</div>
           <div>{{ cartStore.summaryPrice }}</div>
         </div>
