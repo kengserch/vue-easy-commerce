@@ -31,7 +31,7 @@ const removeProduct = (index) => {
                 <RouterLink :to="{ name: 'admin-products-create' }" class="btn btn-neutral">Add New</RouterLink>
             </div>
         </div>
-        <Table :headers="['name', 'image', 'price', 'quantity', 'status', 'updatedAt', '']">
+        <Table :headers="['Name', 'Image', 'Price', 'Quantity', 'Status', 'UpdatedAt', '']">
             <!-- row 1 -->
             <tr v-for="(product, index) in adminProductStore.list" :key="index">
                 <th>{{ product.name }}</th>

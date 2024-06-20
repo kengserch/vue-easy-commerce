@@ -102,7 +102,7 @@ const router = createRouter({
     },
     {
       path: '/admin/orders/detail/:id',
-      name: 'admin-orders-update',
+      name: 'admin-orders-detail',
       component: AdminOrderDetail
     }
   ]
