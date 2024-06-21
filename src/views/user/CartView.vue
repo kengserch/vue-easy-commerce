@@ -31,7 +31,6 @@ const changeQuantity = (event, index) =>{
                 <div class="relative grid grid-cols-2">
                   <div>
                     <div><b>{{item.name}}</b></div>
-                    <div>{{item.about}}</div>
                     <div>{{item.price}} ฿</div>
                   </div>
                   <div>
@@ -42,7 +41,7 @@ const changeQuantity = (event, index) =>{
                     </select>
                   </div>
                   <div @click="cartStore.removeItemIncart(index)" class="absolute top-1 right-0">
-                    <Close class="fill-white cursor-pointer"></Close>
+                    <Close class="fill-black cursor-pointer"></Close>
                   </div>
                 </div>
               </div>

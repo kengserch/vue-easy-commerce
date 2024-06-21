@@ -1,7 +1,7 @@
 <script setup>
 //config
 import { reactive, onMounted, ref } from "vue";
-import { useRouter, useRoute } from "vue-router";
+import { useRouter, useRoute, RouterLink } from "vue-router";
 //layout
 import AdminLayout from "@/layouts/AdminLayout.vue";
 //store
@@ -14,7 +14,7 @@ const formData = [
     },
     {
         name: "Image",
-        field: "image",
+        field: "imageUrl",
     },
     {
         name: "Price",
@@ -39,7 +39,7 @@ const mode = ref("ADD");
 
 const productData = reactive({
     name: "",
-    image: "",
+    imageUrl: "",
     price: 0,
     quantity: 0,
     about: "",
@@ -63,7 +63,7 @@ onMounted(() => {
         const selectedProduct = adminProductStore.getProduct(productIndex.value);
         // console.log('selectedProduct',selectedProduct)
         productData.name = selectedProduct.name;
-        productData.image = selectedProduct.image;
+        productData.imageUrl = selectedProduct.imageUrl;
         productData.price = selectedProduct.price;
         productData.quantity = selectedProduct.quantity;
         productData.about = selectedProduct.about;
@@ -98,8 +98,8 @@ onMounted(() => {
                     </select>
                 </label>
             </div>
-            <div class="mt-4 flex justify-end">
-                <button class="btn btn-ghost">Back</button>
+            <div class="mt-4 flex justify-end gap-2">
+                <RouterLink :to="{ name:'admin-products-list'}" class="btn btn-outline">Back</RouterLink>
                 <button class="btn btn-neutral" @click="updateProduct">{{ mode }}</button>
             </div>
         </div>

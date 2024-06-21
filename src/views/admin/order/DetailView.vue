@@ -65,7 +65,7 @@ onMounted(() => {
                 <div>{{ orderData.totalPrice }} ฿</div>
             </div>
             <div class="flex justify-end mt-4">
-                <RouterLink :to="{name:'admin-orders-list'}" class="btn btn-ghost">Back</RouterLink>
+                <RouterLink :to="{name:'admin-orders-list'}" class="btn btn-outline">Back</RouterLink>
             </div>
         </div>
     </AdminLayout>

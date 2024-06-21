@@ -15,7 +15,7 @@ import { useAdminProductStore } from "@/stores/admin/product";
 const adminProductStore = useAdminProductStore();
 
 onMounted(() => {
-    adminProductStore.loadProduct();
+    adminProductStore.loadProducts();
 });
 
 const removeProduct = (index) => {
@@ -36,7 +36,7 @@ const removeProduct = (index) => {
             <tr v-for="(product, index) in adminProductStore.list" :key="index">
                 <th>{{ product.name }}</th>
                 <td>
-                    <img :src="product.image" class="w-12" />
+                    <img :src="product.imageUrl" class="w-24" />
                 </td>
                 <td>{{ product.price }}</td>
                 <td>{{ product.remainQuantity }} / {{ product.quantity }}</td>
@@ -47,12 +47,12 @@ const removeProduct = (index) => {
                 </td>
                 <td>{{ product.updatedAt }}</td>
                 <td>
-                    <div class="flex">
-                        <RouterLink :to="{ name: 'admin-products-update', params: { id: index } }" class="btn btn-ghost">
-                            <Edit class="w-5"></Edit>
+                    <div class="flex gap-2">
+                        <RouterLink :to="{ name: 'admin-products-update', params: { id: index } }" class="btn btn-warning">
+                            <Edit class="w-5 fill-black"></Edit>
                         </RouterLink>
-                        <button @click="removeProduct(index)" class="btn btn-ghost">
-                            <Trash class="w-5"></Trash>
+                        <button @click="removeProduct(index)" class="btn  btn-error">
+                            <Trash class="w-5 fill-black"></Trash>
                         </button>
                     </div>
                 </td>

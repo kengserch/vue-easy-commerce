@@ -6,7 +6,7 @@ export const useAdminProductStore = defineStore('admin-product', {
         loaded: false
     }),
     actions : {
-        loadProduct () {
+        loadProducts () {
             const products = localStorage.getItem('admin-products')
             if(products){
                 this.list = JSON.parse(products)
@@ -27,10 +27,11 @@ export const useAdminProductStore = defineStore('admin-product', {
         },
         updateProduct (index, productData){
             this.list[index].name = productData.name
-            this.list[index].image = productData.image
+            this.list[index].imageUrl = productData.imageUrl
             this.list[index].price = productData.price
             this.list[index].quantity = productData.quantity
             this.list[index].remainQuantity = productData.quantity
+            this.list[index].about = productData.about
             this.list[index].status = productData.status
             this.list[index].updatedAt = (new Date()).toISOString()
             localStorage.setItem('admin-products', JSON.stringify(this.list))

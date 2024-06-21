@@ -25,7 +25,7 @@ const adminOrderStore = useAdminOrderStore()
                 <td>{{order.status}}</td>
                 <td>{{order.updatedAt}}</td>
                 <td>
-                    <RouterLink :to="{name:'admin-orders-detail', params: { id: index }}" class="btn">See detail</RouterLink>
+                    <RouterLink :to="{name:'admin-orders-detail', params: { id: index }}" class="btn btn-outline">See detail</RouterLink>
                 </td>
             </tr>
         </Table>

@@ -1,11 +1,13 @@
 <script setup>
 //config
 import { ref, reactive, onMounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute, useRouter, RouterLink } from "vue-router";
 //layout
 import AdminLayout from "@/layouts/AdminLayout.vue";
 //store
 import { useAdminUserStore } from "@/stores/admin/user";
+import { useEventStore } from "@/stores/event";
+
 
 const formData = [
     {
@@ -28,6 +30,7 @@ const formData = [
 ];
 
 const adminUserStore = useAdminUserStore();
+const eventStore = useEventStore();
 const route = useRoute();
 const router = useRouter()
 
@@ -50,6 +53,7 @@ onMounted(() => {
 
 const updateUser = () => {
     adminUserStore.updateUser(userIndex.value,userData)
+    eventStore.popupMessage('success', 'Update User Successful')
     router.push({name:'admin-users-list'})
 };
 </script>
@@ -72,8 +76,8 @@ const updateUser = () => {
                     </select>
                 </label>
             </div>
-            <div class="mt-4 flex justify-end">
-                <button class="btn btn-ghost">Back</button>
+            <div class="mt-4 flex justify-end gap-2">
+                <RouterLink :to="{name:'admin-users-list'}" class="btn btn-outline">Back</RouterLink>
                 <button class="btn btn-neutral" @click="updateUser">Update</button>
             </div>
         </div>

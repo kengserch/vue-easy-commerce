@@ -2,8 +2,35 @@ import { defineStore } from 'pinia'
 
 export const useProductStore = defineStore('product', {
   state: () => ({
-    list:[
-      {
+    list:[],
+    loaded: false
+  }),
+  actions: {
+    loadProducts () {
+      const products = localStorage.getItem('admin-products')
+      if(products){
+          this.list = JSON.parse(products)
+          this.loaded = true
+      }
+      console.log(products)
+    },
+    filterProducts (searchText) {
+      return this.list.filter(product => product.name.includes(searchText))
+    },
+    getProduct (index){
+      try {
+        //this.selectedProduct = this.list.find(product => product.id == id)
+        //return this.list.find(product => product.id == id)
+         return this.list[index]
+      } catch (error) {
+        console.log('error', error)
+      }
+    }
+  }
+})
+
+/*
+{
         id:1,
         name: 'Made in USA 990v6',
         description: 'The designers of the first 990 were tasked with creating the single best running shoe on the market. The MADE in USA 990v6 embraces this original mandate, with a series of performance-inspired updates. The upper dispenses with the standard midfoot saddle, allowing the pigskin and synthetic overlays to flow from heel to toe across the mesh underlay, for a speedy, streamlined look. While the evolved design marks one of the most dramatic changes from one generation model to the next that the 990 has ever seen, the greatest leap forward occurs on the inside. The addition of FuelCell midsole cushioning means that the evolution of the 990 can be felt as much as it can be seen.',
@@ -90,21 +117,5 @@ export const useProductStore = defineStore('product', {
         status: 'open',
         price: 8500,
         color:'Black with sandstone and white'
-      } 
-    ]
-  }),
-  actions: {
-    filterProducts (searchText) {
-      return this.list.filter(product => product.name.includes(searchText))
-    },
-    loadProduct (id){
-      try {
-        //this.selectedProduct = this.list.find(product => product.id == id)
-        return this.list.find(product => product.id == id)
-        //console.log(this.list.find(product => product.id == id))
-      } catch (error) {
-        console.log('error', error)
-      }
-    }
-  }
-})
+      }  
+*/
