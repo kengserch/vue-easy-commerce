@@ -45,22 +45,26 @@ const productData = reactive({
     about: "",
     status: "",
 });
-const updateProduct = () => {
-    if (mode.value === "EDIT") {
-        adminProductStore.updateProduct(productIndex.value, productData)
-    } else {
-        //console.log(productData)
-        adminProductStore.addProduct(productData);
+const updateProduct = async () => {
+    try {
+        if (mode.value === "EDIT") {
+            await adminProductStore.updateProduct(productIndex.value, productData);
+        } else {
+            //console.log(productData)
+            await adminProductStore.addProduct(productData);
+        }
+        router.push({ name: "admin-products-list" });
+    } catch (error) {
+        console.log('error',error)
     }
-    router.push({ name: "admin-products-list" });
 };
 
-onMounted(() => {
+onMounted(async () => {
     if (route.params.id) {
         mode.value = "EDIT";
 
-        productIndex.value = parseInt(route.params.id);
-        const selectedProduct = adminProductStore.getProduct(productIndex.value);
+        productIndex.value = route.params.id;
+        const selectedProduct = await adminProductStore.getProduct(productIndex.value);
         // console.log('selectedProduct',selectedProduct)
         productData.name = selectedProduct.name;
         productData.imageUrl = selectedProduct.imageUrl;
@@ -99,7 +103,7 @@ onMounted(() => {
                 </label>
             </div>
             <div class="mt-4 flex justify-end gap-2">
-                <RouterLink :to="{ name:'admin-products-list'}" class="btn btn-outline">Back</RouterLink>
+                <RouterLink :to="{ name: 'admin-products-list' }" class="btn btn-outline">Back</RouterLink>
                 <button class="btn btn-neutral" @click="updateProduct">{{ mode }}</button>
             </div>
         </div>

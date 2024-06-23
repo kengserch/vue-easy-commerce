@@ -1,44 +1,69 @@
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia";
 
-export const useAdminProductStore = defineStore('admin-product', { 
+import { collection, doc, getDoc, getDocs, addDoc, setDoc, deleteDoc } from "firebase/firestore";
+import { db } from "@/firebase";
+
+export const useAdminProductStore = defineStore("admin-product", {
     state: () => ({
         list: [],
-        loaded: false
+        loaded: false,
     }),
-    actions : {
-        loadProducts () {
-            const products = localStorage.getItem('admin-products')
-            if(products){
-                this.list = JSON.parse(products)
-                this.loaded = true
+    actions: {
+        async loadProducts() {
+            const productCol = collection(db, "products");
+            const productSnapshot = await getDocs(productCol);
+            const products = productSnapshot.docs.map((doc) => {
+                const convertedProduct = doc.data();
+                convertedProduct.productId = doc.id;
+                convertedProduct.updatedAt = convertedProduct.updatedAt.toDate();
+                return convertedProduct;
+            });
+            this.list = products;
+        },
+        async getProduct(productId) {
+            try {
+                const productRef = doc(db, "products", productId);
+                const productSnapshot = await getDoc(productRef);
+                return productSnapshot.data();
+            } catch (error) {
+                console.log("error", error);
             }
         },
-        getProduct (index){
-            if(!this.loaded){
-                this.loadProduct()
+        async addProduct(productData) {
+            try {
+                productData.remainQuantity = productData.quantity;
+                productData.updatedAt = new Date();
+                const productCol = collection(db, "products");
+                await addDoc(productCol, productData);
+            } catch (error) {
+                console.log("error", error);
             }
-            return this.list[index]
         },
-        addProduct (productData) {
-            productData.remainQuantity = productData.quantity
-            productData.updatedAt = (new Date()).toISOString()
-            this.list.push(productData)
-            localStorage.setItem('admin-products', JSON.stringify(this.list))
+        async updateProduct(productId, productData) {
+            try {
+                const updateProduct = {};
+                updateProduct.name = productData.name;
+                updateProduct.imageUrl = productData.imageUrl;
+                updateProduct.price = productData.price;
+                updateProduct.quantity = productData.quantity;
+                updateProduct.remainQuantity = productData.quantity;
+                updateProduct.about = productData.about;
+                updateProduct.status = productData.status;
+                updateProduct.updatedAt = new Date();
+
+                const productRef = doc(db, "products", productId);
+                await setDoc(productRef, updateProduct);
+            } catch (error) {
+                console.log("error", error);
+            }
         },
-        updateProduct (index, productData){
-            this.list[index].name = productData.name
-            this.list[index].imageUrl = productData.imageUrl
-            this.list[index].price = productData.price
-            this.list[index].quantity = productData.quantity
-            this.list[index].remainQuantity = productData.quantity
-            this.list[index].about = productData.about
-            this.list[index].status = productData.status
-            this.list[index].updatedAt = (new Date()).toISOString()
-            localStorage.setItem('admin-products', JSON.stringify(this.list))
+        async removeProduct(productId) {
+            try {
+                const productRef = doc(db, "products", productId);
+                await deleteDoc(productRef)
+            } catch (error) {
+                console.log("error", error);
+            }
         },
-        removeProduct (index) {
-            this.list.splice(index, 1)
-            localStorage.setItem('admin-products', JSON.stringify(this.list))
-        }
-    }
-})
+    },
+});

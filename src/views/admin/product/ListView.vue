@@ -14,12 +14,17 @@ import { useAdminProductStore } from "@/stores/admin/product";
 
 const adminProductStore = useAdminProductStore();
 
-onMounted(() => {
-    adminProductStore.loadProducts();
+onMounted(async () => {
+    await adminProductStore.loadProducts();
 });
 
-const removeProduct = (index) => {
-    adminProductStore.removeProduct(index);
+const removeProduct = async (index) => {
+    try {
+        await adminProductStore.removeProduct(index);
+        await adminProductStore.loadProducts();
+    } catch (error) {
+        console.log("error", error);
+    }
 };
 </script>
 
@@ -48,10 +53,10 @@ const removeProduct = (index) => {
                 <td>{{ product.updatedAt }}</td>
                 <td>
                     <div class="flex gap-2">
-                        <RouterLink :to="{ name: 'admin-products-update', params: { id: index } }" class="btn btn-warning">
+                        <RouterLink :to="{ name: 'admin-products-update', params: { id: product.productId } }" class="btn btn-warning">
                             <Edit class="w-5 fill-black"></Edit>
                         </RouterLink>
-                        <button @click="removeProduct(index)" class="btn  btn-error">
+                        <button @click="removeProduct(product.productId)" class="btn btn-error">
                             <Trash class="w-5 fill-black"></Trash>
                         </button>
                     </div>
