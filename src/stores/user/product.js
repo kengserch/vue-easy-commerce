@@ -1,33 +1,31 @@
-import { defineStore } from 'pinia'
+import { defineStore } from "pinia";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "@/firebase";
 
-export const useProductStore = defineStore('product', {
-  state: () => ({
-    list:[],
-    loaded: false
-  }),
-  actions: {
-    loadProducts () {
-      const products = localStorage.getItem('admin-products')
-      if(products){
-          this.list = JSON.parse(products)
-          this.loaded = true
-      }
-      console.log(products)
+export const useProductStore = defineStore("product", {
+    state: () => ({
+        list: [],
+        selectedProduct: {},
+        loaded: false,
+    }),
+    actions: {
+        async loadProducts() {
+            //const products = localStorage.getItem('admin-products')
+            const productSnapshot = await getDocs(collection(db, "products"));
+            const products = productSnapshot.docs.map((doc) => doc.data());
+            if (products.length > 0) {
+                this.list = products;
+                this.loaded = true;
+            }
+        },
+        filterProducts(searchText) {
+            return this.list.filter((product) => product.name.includes(searchText));
+        },
+        loadProduct(id) {
+            return this.list[id];
+        },
     },
-    filterProducts (searchText) {
-      return this.list.filter(product => product.name.includes(searchText))
-    },
-    getProduct (index){
-      try {
-        //this.selectedProduct = this.list.find(product => product.id == id)
-        //return this.list.find(product => product.id == id)
-         return this.list[index]
-      } catch (error) {
-        console.log('error', error)
-      }
-    }
-  }
-})
+});
 
 /*
 {

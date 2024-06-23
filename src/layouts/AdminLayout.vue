@@ -1,6 +1,8 @@
 <script setup>
 import { ref, onMounted } from "vue";
-import { RouterLink, useRoute } from "vue-router";
+import { RouterLink, useRoute, useRouter } from "vue-router";
+
+import { useAccountStore } from "@/stores/account";
 const menus = [
     {
         name: "Dashboard",
@@ -18,16 +20,23 @@ const menus = [
         name: "Order",
         routeName: "admin-orders-list",
     },
-    {
-        name: "Logout",
-        routeName: "admin-login",
-    }
 ];
-const route = useRoute()
+const route = useRoute();
+const router = useRouter();
+const accountStore = useAccountStore();
 const activeMenu = ref("");
 onMounted(() => {
-    activeMenu.value = route.name
+    activeMenu.value = route.name;
 });
+
+const logout = async () => {
+    try {
+        await accountStore.logout();
+        router.push({name:'login'})
+    } catch (error) {
+        console.log("error", error);
+    }
+};
 </script>
 
 <template>
@@ -44,11 +53,12 @@ onMounted(() => {
                     <a>Back office</a>
                 </li>
                 <li v-for="menu in menus" :key="menu.name">
-                    <RouterLink 
-                        :class="activeMenu === menu.routeName  ? 'active' : '' " 
-                        :to="{ name: menu.routeName }">
+                    <RouterLink :class="activeMenu === menu.routeName ? 'active' : ''" :to="{ name: menu.routeName }">
                         {{ menu.name }}
                     </RouterLink>
+                </li>
+                <li>
+                    <a @click="logout">Logout</a>
                 </li>
             </ul>
         </div>
