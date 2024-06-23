@@ -1,17 +1,20 @@
 <script setup>
 //config
+import { onMounted } from "vue";
 import { RouterLink } from "vue-router";
 //layout
 import AdminLayout from "@/layouts/AdminLayout.vue";
 //component
-import Edit from "@/components/icons/Edit.vue";
-import Trash from "@/components/icons/Trash.vue";
 import Table from "@/components/Table.vue";
 
 //store
 import { useAdminUserStore } from "@/stores/admin/user";
 
 const adminUserStore = useAdminUserStore()
+
+onMounted( async () => {
+   await adminUserStore.loadUser()
+})
 
 const changeStatus = (index) => {
     let selectedUser = adminUserStore.list[index]

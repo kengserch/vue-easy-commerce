@@ -1,7 +1,8 @@
 import { defineStore } from "pinia";
 
 import { signInWithPopup, signInWithEmailAndPassword, signOut, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
-import { auth } from "@/firebase";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { auth, db } from "@/firebase";
 const provider = new GoogleAuthProvider();
 
 export const useAccountStore = defineStore("account", {
@@ -9,15 +10,33 @@ export const useAccountStore = defineStore("account", {
         isLoggedIn: false,
         isAdmin: false,
         user: {},
+        profile: {}
     }),
     actions: {
         async checkAuth() {
             return new Promise((resolve) => {
-                onAuthStateChanged(auth, (user) => {
+                onAuthStateChanged(auth, async (user) => {
                     if (user) {
                         this.user = user;
-                        if(user.email === 'admin@test.com'){
-                            this.isAdmin = true
+                        const docRef = doc(db, "users", user.uid)
+                        const docSnap = await getDoc(docRef)
+                        if (docSnap.exists()) {
+                            //ไม่สร้างข้อมูลใหม่
+                            this.profile = docSnap.data()
+                        }else{
+                            //ยังไม่มีข้อมูล = สร้างใหม่
+                            const newUser = {
+                                fullname: user.displayName,
+                                role: 'member',
+                                status: 'active',
+                                updatedAt: new Date()
+                            }
+                            await setDoc(docRef, newUser)
+                            this.profile = newUser
+                        }
+                        //console.log(this.profile)
+                        if (this.profile.role === 'admin') {
+                            this.isAdmin = true;
                         }
                         this.isLoggedIn = true;
                         resolve(true);
@@ -43,14 +62,14 @@ export const useAccountStore = defineStore("account", {
                 this.isAdmin = true;
                 this.user = result.user;
             } catch (error) {
-                console.log(error.code)
+                console.log(error.code);
                 switch (error.code) {
-                    case 'auth/invalid-email':
-                        throw new Error("Email ไม่ถูกต้อง")
-                    case 'auth/wrong-password':
-                        throw new Error("Password ไม่ถูกต้อง")
+                    case "auth/invalid-email":
+                        throw new Error("Email ไม่ถูกต้อง");
+                    case "auth/wrong-password":
+                        throw new Error("Password ไม่ถูกต้อง");
                     default:
-                        throw new Error("มีปัญหาเกี่ยวกับการ Login")
+                        throw new Error("มีปัญหาเกี่ยวกับการ Login");
                 }
             }
         },
