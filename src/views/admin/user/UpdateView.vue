@@ -41,18 +41,19 @@ const userData = reactive({
     status: "",
 });
 
-onMounted(() => {
+onMounted( async () => {
     if (route.params.id) {
-        userIndex.value = parseInt(route.params.id);
-        const selectedUser = adminUserStore.getUser(userIndex.value);
+        userIndex.value = route.params.id
+        const selectedUser = await adminUserStore.getUser(userIndex.value);
+
         userData.fullname = selectedUser.fullname;
         userData.role = selectedUser.role;
         userData.status = selectedUser.status;
     }
 });
 
-const updateUser = () => {
-    adminUserStore.updateUser(userIndex.value,userData)
+const updateUser = async () => {
+    await adminUserStore.updateUser(userIndex.value,userData)
     eventStore.popupMessage('success', 'Update User Successful')
     router.push({name:'admin-users-list'})
 };

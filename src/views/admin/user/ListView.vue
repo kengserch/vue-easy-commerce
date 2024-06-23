@@ -16,10 +16,10 @@ onMounted( async () => {
    await adminUserStore.loadUser()
 })
 
-const changeStatus = (index) => {
+const changeStatus = async(index) => {
     let selectedUser = adminUserStore.list[index]
     selectedUser.status = selectedUser.status === 'active' ? 'inactive' : 'active'
-    adminUserStore.updateUser(selectedUser)
+    await adminUserStore.updateUser(selectedUser.uid, selectedUser)
 }
 
 </script>
@@ -41,7 +41,7 @@ const changeStatus = (index) => {
                 <td>{{ user.updatedAt }}</td>
                 <td>
                     <div class="flex gap-2">
-                        <RouterLink :to="{ name : 'admin-users-update', params : {id : index }}" class="btn btn-outline">Edit</RouterLink>
+                        <RouterLink :to="{ name : 'admin-users-update', params : {id : user.uid }}" class="btn btn-outline">Edit</RouterLink>
                         <button class="btn" :class="user.status === 'active' ? 'btn-error' : 'btn-success' " @click="changeStatus(index)">
                            {{user.status === 'active' ? 'Disable' : 'Enable'}}
                         </button>
