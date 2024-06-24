@@ -40,13 +40,13 @@ const userFormData = reactive({
 
 const payment = () => {
 
-  if (userFormData.email == '' || userFormData.name == '' || userFormData.address == '') {
-    return alert("โปรดกรอกข้อมูลให้ครบ");
+  // if (userFormData.email == '' || userFormData.name == '' || userFormData.address == '') {
+  //   return alert("โปรดกรอกข้อมูลให้ครบ");
 
-  }
+  // }
 
   cartStore.placeOrder(userFormData)
-  router.push({ name: 'success' })
+  //router.push({ name: 'success' })
 }
 
 </script>
