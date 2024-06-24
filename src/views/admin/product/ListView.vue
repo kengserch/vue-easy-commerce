@@ -1,31 +1,45 @@
 <script setup>
 //config
-import { RouterLink } from "vue-router";
-import { onMounted } from "vue";
+import { RouterLink } from 'vue-router'
+import { onMounted } from 'vue'
 //layout
-import AdminLayout from "@/layouts/AdminLayout.vue";
+import AdminLayout from '@/layouts/AdminLayout.vue'
 //component
-import Edit from "@/components/icons/Edit.vue";
-import Trash from "@/components/icons/Trash.vue";
-import Table from "@/components/Table.vue";
+import Edit from '@/components/icons/Edit.vue'
+import Trash from '@/components/icons/Trash.vue'
+import Table from '@/components/Table.vue'
 
 //store
-import { useAdminProductStore } from "@/stores/admin/product";
+import { useAdminProductStore } from '@/stores/admin/product'
 
-const adminProductStore = useAdminProductStore();
+const adminProductStore = useAdminProductStore()
 
 onMounted(async () => {
-    await adminProductStore.loadProducts();
-});
+    await adminProductStore.loadProducts()
+})
+
+const searchProduct = async () => {
+    await adminProductStore.loadProducts()
+}
+
+const changeStatusFilter = async (newStatus) => {
+    adminProductStore.filter.status = newStatus
+    await adminProductStore.loadProducts()
+}
+
+const changeSortUpdateAt = async (newSort) => {
+    adminProductStore.filter.sort.updatedAt = newSort
+    await adminProductStore.loadProducts()
+}
 
 const removeProduct = async (index) => {
     try {
-        await adminProductStore.removeProduct(index);
-        await adminProductStore.loadProducts();
+        await adminProductStore.removeProduct(index)
+        await adminProductStore.loadProducts()
     } catch (error) {
-        console.log("error", error);
+        console.log('error', error)
     }
-};
+}
 </script>
 
 <template>
@@ -34,6 +48,28 @@ const removeProduct = async (index) => {
             <div class="text-3xl font-bold">Product</div>
             <div>
                 <RouterLink :to="{ name: 'admin-products-create' }" class="btn btn-neutral">Add New</RouterLink>
+            </div>
+        </div>
+        <div class="flex gap-4 justify-center items-end my-4">
+            <div class="flex-1">
+                <input v-model="adminProductStore.filter.search" type="text" placeholder="Type here" class="input input-bordered w-full" />
+            </div>
+            <div class="justify-self-center">
+                <div>Updated At</div>
+                <div class="join">
+                    <button @click="changeSortUpdateAt('asc')" class="btn join-item" :class="adminProductStore.filter.sort.updatedAt === 'asc' ? 'btn-active' : ''">ASC</button>
+                    <button @click="changeSortUpdateAt('desc')" class="btn join-item" :class="adminProductStore.filter.sort.updatedAt === 'desc' ? 'btn-active' : ''">DESC</button>
+                </div>
+            </div>
+            <div class="justify-self-center">
+                <div>Status</div>
+                <div class="join">
+                    <button @click="changeStatusFilter('open')" class="btn join-item" :class="adminProductStore.filter.status === 'open' ? 'btn-active' : ''">OPEN</button>
+                    <button @click="changeStatusFilter('close')" class="btn join-item" :class="adminProductStore.filter.status === 'close' ? 'btn-active' : ''">CLOSE</button>
+                </div>
+            </div>
+            <div class="flex-1">
+                <button @click="searchProduct()" class="btn">Search</button>
             </div>
         </div>
         <Table :headers="['Name', 'Image', 'Price', 'Quantity', 'Status', 'UpdatedAt', '']">
