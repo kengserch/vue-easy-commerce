@@ -1,16 +1,18 @@
 <script setup>
 //config
 import { RouterLink } from 'vue-router'
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 //layout
 import AdminLayout from '@/layouts/AdminLayout.vue'
 //component
 import Edit from '@/components/icons/Edit.vue'
 import Trash from '@/components/icons/Trash.vue'
 import Table from '@/components/Table.vue'
-
+import Pagination from '@/components/Pagination.vue'
 //store
 import { useAdminProductStore } from '@/stores/admin/product'
+
+const currentPage = ref(1)
 
 const adminProductStore = useAdminProductStore()
 
@@ -30,6 +32,17 @@ const changeStatusFilter = async (newStatus) => {
 const changeSortUpdateAt = async (newSort) => {
     adminProductStore.filter.sort.updatedAt = newSort
     await adminProductStore.loadProducts()
+}
+
+const changePage = async (newPage) => {
+    if (newPage < currentPage.value) {
+        //ย้อนกลับ
+        await adminProductStore.loadNextProduct('previous')
+    } else if (newPage > currentPage.value) {
+        //ไปข้างหน้า
+        await adminProductStore.loadNextProduct('next')
+    }
+    currentPage.value = newPage
 }
 
 const removeProduct = async (index) => {
@@ -99,5 +112,6 @@ const removeProduct = async (index) => {
                 </td>
             </tr>
         </Table>
+        <Pagination :activePage="currentPage" :maxPage="adminProductStore.totalPage" :changePage="changePage"></Pagination>
     </AdminLayout>
 </template>
