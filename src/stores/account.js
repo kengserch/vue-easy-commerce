@@ -35,7 +35,7 @@ export const useAccountStore = defineStore("account", {
                             this.profile = newUser
                         }
                         //console.log(this.profile)
-                        if (this.profile.role === 'admin') {
+                        if (this.profile.role === 'admin' || this.profile.role === 'moderator') {
                             this.isAdmin = true;
                         }
                         this.isLoggedIn = true;

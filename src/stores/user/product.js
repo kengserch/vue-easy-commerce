@@ -11,7 +11,8 @@ export const useProductStore = defineStore("product", {
     actions: {
         async loadProducts() {
             //const products = localStorage.getItem('admin-products')
-            const productSnapshot = await getDocs(collection(db, "products"));
+            const productCol = query(collection(db, "products"), where('status', '==', 'open'))
+            const productSnapshot = await getDocs(productCol);
             const products = productSnapshot.docs.map((doc) => doc.data());
             if (products.length > 0) {
                 this.list = products;
