@@ -57,7 +57,7 @@ onMounted(() => {
                             <img :src="profileImageUrl" />
                         </div>
                     </div>
-                    <input type="file" @change="handleFileUpload" />
+                    <input class="file-input file-input-bordered w-full mt-2" type="file" @change="handleFileUpload" />
                 </div>
                 <label class="form-control w-full">
                     <div class="label">

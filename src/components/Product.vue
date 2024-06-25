@@ -14,8 +14,8 @@ defineProps({
     <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 m-4">
         <div v-for="(product, index) in products" :key="index" class="card w-full bg-base-100 shadow-xl">
              <RouterLink :to="{ name: 'product-detail', params: { id: index } }">
-                <figure>
-                    <img class="w-full h-auto" :src="product.imageUrl" />
+                <figure class="max-h-80">
+                    <img class="w-full" :src="product.imageUrl" alt="Shoes"/>
                 </figure>
             </RouterLink>
                 <div class="card-body">

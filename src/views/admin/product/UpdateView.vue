@@ -1,79 +1,97 @@
 <script setup>
 //config
-import { reactive, onMounted, ref } from "vue";
-import { useRouter, useRoute, RouterLink } from "vue-router";
+import { reactive, onMounted, ref } from 'vue'
+import { useRouter, useRoute, RouterLink } from 'vue-router'
 //layout
-import AdminLayout from "@/layouts/AdminLayout.vue";
+import AdminLayout from '@/layouts/AdminLayout.vue'
 //store
-import { useAdminProductStore } from "@/stores/admin/product";
+import { useAdminProductStore } from '@/stores/admin/product'
+//firebase storage
+import { storage } from '@/firebase'
+import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage'
 
 const formData = [
     {
-        name: "Name",
-        field: "name",
+        name: 'Name',
+        field: 'name',
     },
     {
-        name: "Image",
-        field: "imageUrl",
+        name: 'Image',
+        field: 'imageUrl',
+        type: 'upload-image',
     },
     {
-        name: "Price",
-        field: "price",
+        name: 'Price',
+        field: 'price',
     },
     {
-        name: "Quantity",
-        field: "quantity",
+        name: 'Quantity',
+        field: 'quantity',
     },
     {
-        name: "About",
-        field: "about",
+        name: 'About',
+        field: 'about',
     },
-];
+]
 
-const adminProductStore = useAdminProductStore();
-const router = useRouter();
-const route = useRoute();
+const adminProductStore = useAdminProductStore()
+const router = useRouter()
+const route = useRoute()
 
-const productIndex = ref(-1);
-const mode = ref("ADD");
+const productIndex = ref(-1)
+const mode = ref('ADD')
 
 const productData = reactive({
-    name: "",
-    imageUrl: "",
+    name: '',
+    imageUrl: '',
     price: 0,
     quantity: 0,
-    about: "",
-    status: "",
-});
+    about: '',
+    status: '',
+})
 const updateProduct = async () => {
     try {
-        if (mode.value === "EDIT") {
-            await adminProductStore.updateProduct(productIndex.value, productData);
+        if (mode.value === 'EDIT') {
+            await adminProductStore.updateProduct(productIndex.value, productData)
         } else {
             //console.log(productData)
-            await adminProductStore.addProduct(productData);
+            await adminProductStore.addProduct(productData)
         }
-        router.push({ name: "admin-products-list" });
+        router.push({ name: 'admin-products-list' })
     } catch (error) {
-        console.log('error',error)
+        console.log('error', error)
     }
-};
+}
+
+const handleFileUpload = async (event) => {
+    const file = event.target.files[0]
+    let mainPath = ''
+    if(productIndex.value !== -1){
+        mainPath = productIndex.value + '-'
+    }
+    if (file) {
+        const uploadRef = storageRef(storage, `products/${mainPath}/${file.name}`)
+        const snapshot = await uploadBytes(uploadRef, file)
+        const downloadUrl = await getDownloadURL(snapshot.ref)
+        productData.imageUrl = downloadUrl
+    }
+}
 
 onMounted(async () => {
     if (route.params.id) {
-        mode.value = "EDIT";
+        mode.value = 'EDIT'
 
-        productIndex.value = route.params.id;
-        const selectedProduct = await adminProductStore.getProduct(productIndex.value);
+        productIndex.value = route.params.id
+        const selectedProduct = await adminProductStore.getProduct(productIndex.value)
         // console.log('selectedProduct',selectedProduct)
-        productData.name = selectedProduct.name;
-        productData.imageUrl = selectedProduct.imageUrl;
-        productData.price = selectedProduct.price;
-        productData.quantity = selectedProduct.quantity;
-        productData.about = selectedProduct.about;
-        productData.status = selectedProduct.status;
+        productData.name = selectedProduct.name
+        productData.imageUrl = selectedProduct.imageUrl
+        productData.price = selectedProduct.price
+        productData.quantity = selectedProduct.quantity
+        productData.about = selectedProduct.about
+        productData.status = selectedProduct.status
     }
-});
+})
 </script>
 
 <template>
@@ -86,7 +104,15 @@ onMounted(async () => {
                     <div class="label">
                         <span class="label-text">{{ form.name }}</span>
                     </div>
-                    <input type="text" :placeholder="form.field" class="input input-bordered w-full" v-model="productData[form.field]" />
+                    <input v-if="form.type !== 'upload-image'" type="text" :placeholder="form.field" class="input input-bordered w-full" v-model="productData[form.field]" />
+                    <div v-else>
+                        <div class="avatar">
+                            <div class="w-24 rounded-xl">
+                                <img :src="productData[form.field]" />
+                            </div>
+                        </div>
+                        <input type="file" class="file-input file-input-bordered w-full" @change="handleFileUpload" />
+                    </div>
                 </label>
             </div>
             <div class="divider"></div>
