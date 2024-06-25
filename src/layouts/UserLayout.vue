@@ -13,13 +13,8 @@ const router = useRouter();
 
 const isLoggedIn = ref(false);
 const searchText = ref("");
-
-const profileImageUrl = ref("https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg");
 const name = ref("");
 
-onMounted( async () => {
-    
-})
 
 const login = async () => {
     try {
@@ -83,7 +78,7 @@ const handleSearch = (event) => {
                     </div>
                     <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
                         <div class="w-10 rounded-full">
-                            <img alt="Tailwind CSS Navbar component" :src="profileImageUrl" />
+                            <img alt="Tailwind CSS Navbar component" :src="accoutStore.profile.imageUrl || 'https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg'" />
                         </div>
                     </div>
                     <ul tabindex="0" class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
