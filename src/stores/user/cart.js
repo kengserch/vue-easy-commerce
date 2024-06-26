@@ -1,7 +1,10 @@
 import { defineStore } from 'pinia'
 
 import { updateDoc, increment, doc, writeBatch } from 'firebase/firestore'
-import { db } from '@/firebase'
+import { ref, onValue, set } from 'firebase/database'
+import { db, realtimeDB } from '@/firebase'
+
+import { useAccountStore } from '@/stores/account'
 
 export const useCartStore = defineStore('cart', {
     state: () => ({
@@ -17,15 +20,39 @@ export const useCartStore = defineStore('cart', {
                 return acc + item.price * item.quantity
             }, 0)
         },
+        user(state) {
+            const accountStore = useAccountStore()
+            return accountStore.user
+        },
+        cartRef(state) {
+            return ref(realtimeDB, `carts/${this.user.uid}`)
+        },
     },
     actions: {
-        loadCart() {
-            const previousCart = localStorage.getItem('cart-data')
-            if (previousCart) {
-                this.items = JSON.parse(previousCart)
+        async loadCart() {
+            // console.log('cart user', this.user)
+            if (this.user.uid) {
+                onValue(
+                    this.cartRef,
+                    (snapshot) => {
+                        const data = snapshot.val()
+                        if (data) {
+                            this.items = data
+                        }
+                    },
+                    (err) => {
+                        console.log('error', err)
+                    }
+                )
+            } else {
+                const previousCart = localStorage.getItem('cart-data')
+                if (previousCart) {
+                    this.items = JSON.parse(previousCart)
+                }
             }
+            
         },
-        addToCart(ProductData) {
+        async addToCart(ProductData) {
             const findProductIndex = this.items.findIndex((item) => {
                 return item.name === ProductData.name
             })
@@ -34,17 +61,19 @@ export const useCartStore = defineStore('cart', {
                 this.items.push(ProductData)
             } else {
                 const currentItem = this.items[findProductIndex]
-
                 this.updateQuantity(findProductIndex, currentItem.quantity + 1)
             }
+            await set(this.cartRef, this.items)
             localStorage.setItem('cart-data', JSON.stringify(this.items))
         },
-        updateQuantity(index, quantity) {
+        async updateQuantity(index, quantity) {
             this.items[index].quantity = quantity
+            await set(this.cartRef, this.items)
             localStorage.setItem('cart-data', JSON.stringify(this.items))
         },
-        removeItemIncart(index) {
+        async removeItemIncart(index) {
             this.items.splice(index, 1)
+            await set(this.cartRef, this.items)
             localStorage.setItem('cart-data', JSON.stringify(this.items))
         },
         async placeOrder(userData) {
@@ -57,9 +86,9 @@ export const useCartStore = defineStore('cart', {
                     orderNumber: `AA${Math.floor(Math.random() * 90000 + 10000)}`,
                     products: this.items,
                 }
-                
+
                 const batch = writeBatch(db)
-                
+
                 for (const product of orderData.products) {
                     const productRef = doc(db, 'products', product.productId)
                     batch.update(productRef, {
@@ -69,7 +98,7 @@ export const useCartStore = defineStore('cart', {
                 await batch.commit()
                 localStorage.setItem('order-data', JSON.stringify(orderData))
             } catch (error) {
-                console.log('error',error)
+                console.log('error', error)
             }
         },
         loadCheckout() {

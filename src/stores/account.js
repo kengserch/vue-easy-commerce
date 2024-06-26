@@ -18,7 +18,7 @@ export const useAccountStore = defineStore('account', {
                 onAuthStateChanged(auth, async (user) => {
                     if (user) {
                         this.user = user
-                        console.log('user', this.user)
+                        // console.log('user', this.user)
                         const docRef = doc(db, 'users', user.uid)
                         const docSnap = await getDoc(docRef)
                         if (docSnap.exists()) {

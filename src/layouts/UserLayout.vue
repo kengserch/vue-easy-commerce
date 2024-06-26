@@ -19,6 +19,7 @@ const name = ref("");
 const login = async () => {
     try {
         await accoutStore.signInWithGoogle();
+        location.reload()
     } catch (error) {
         console.log("error", error);
     }

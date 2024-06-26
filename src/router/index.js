@@ -21,6 +21,7 @@ import AdminOrderList from '@/views/admin/order/ListView.vue'
 import AdminOrderDetail from '@/views/admin/order/DetailView.vue'
 
 import { useAccountStore } from "@/stores/account.js";
+import { useCartStore } from '@/stores/user/cart'
 
 
 const router = createRouter({
@@ -113,6 +114,10 @@ const router = createRouter({
 router.beforeEach(async(to, from, next) => {
   const accoutStore = useAccountStore()
   await accoutStore.checkAuth()
+
+  const cartStore = useCartStore()
+  await cartStore.loadCart()
+  
   if(to.name.includes('admin') && !accoutStore.isAdmin){
     next({name:'home'})
   }else if(to.name === 'login' && accoutStore.isAdmin){
