@@ -1,47 +1,52 @@
 <script setup>
 //config
-import { RouterLink, useRouter } from "vue-router";
-import { ref, onMounted } from "vue";
+import { RouterLink, useRouter } from 'vue-router'
+import { ref, onMounted } from 'vue'
 //store
-import { useCartStore } from "@/stores/user/cart";
-import { useAccountStore } from "@/stores/account.js";
+import { useCartStore } from '@/stores/user/cart'
+import { useAccountStore } from '@/stores/account.js'
+import { useEventStore } from '@/stores/event'
 
-const cartStore = useCartStore();
-const accoutStore = useAccountStore();
+const cartStore = useCartStore()
+const accoutStore = useAccountStore()
+const eventStore = useEventStore()
 
-const router = useRouter();
+const router = useRouter()
 
-const isLoggedIn = ref(false);
-const searchText = ref("");
-const name = ref("");
+const isLoggedIn = ref(false)
+const searchText = ref('')
+const name = ref('')
 
+onMounted(() => {
+    eventStore.loadBanner()
+})
 
 const login = async () => {
     try {
-        await accoutStore.signInWithGoogle();
+        await accoutStore.signInWithGoogle()
         location.reload()
     } catch (error) {
-        console.log("error", error);
+        console.log('error', error)
     }
-};
+}
 const logout = async () => {
     try {
-        await accoutStore.logout();
-        window.location.reload();
+        await accoutStore.logout()
+        window.location.reload()
     } catch (error) {
-        console.log("error", error);
+        console.log('error', error)
     }
-};
+}
 const handleSearch = (event) => {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
         router.push({
-            name: "search",
+            name: 'search',
             query: {
                 q: searchText.value,
             },
-        });
+        })
     }
-};
+}
 </script>
 <template>
     <div class="container mx-auto">
@@ -79,7 +84,7 @@ const handleSearch = (event) => {
                     </div>
                     <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
                         <div class="w-10 rounded-full">
-                            <img alt="Tailwind CSS Navbar component" :src="accoutStore.profile.imageUrl || 'https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg'" />
+                            <img alt="Tailwind CSS Navbar component'" :src="accoutStore.profile.imageUrl || 'https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg'" />
                         </div>
                     </div>
                     <ul tabindex="0" class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
@@ -94,6 +99,11 @@ const handleSearch = (event) => {
             </div>
         </div>
         <!-- Main Content-->
+        <div v-if="eventStore.banner.display">
+            <a :href="eventStore.banner.link" target="_blank">
+                <img class="w-full" :src="eventStore.banner.imageUrl" />
+            </a>
+        </div>
         <slot></slot>
         <footer class="footer p-10 bg-neutral text-neutral-content">
             <nav>
