@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 
-import { updateDoc, increment, doc, writeBatch } from 'firebase/firestore'
+import axios from 'axios';
+
 import { ref, onValue, set } from 'firebase/database'
 import { db, realtimeDB } from '@/firebase'
 
@@ -78,25 +79,24 @@ export const useCartStore = defineStore('cart', {
         },
         async placeOrder(userData) {
             try {
-                const orderData = {
+                const checkoutData = {
                     ...userData,
-                    totalPrice: this.summaryPrice,
-                    paymentMethod: 'Credit Card',
-                    createdDate: new Date().toLocaleString(),
-                    orderNumber: `AA${Math.floor(Math.random() * 90000 + 10000)}`,
-                    products: this.items,
+                    products: this.items.map(product => ({
+                        productId: product.productId,
+                        quantity : product.quantity,
+                    }))
                 }
+                console.log('checkoutData',checkoutData)
 
-                const batch = writeBatch(db)
+                const response = await axios.post('/api/placeorder', {
+                    source: 'test_src', //เพิ่มตอนทำ omise
+                    checkout: checkoutData
+                })
+                //console.log('response', response.data)
 
-                for (const product of orderData.products) {
-                    const productRef = doc(db, 'products', product.productId)
-                    batch.update(productRef, {
-                        remainQuantity: increment(-1),
-                    })
-                }
-                await batch.commit()
-                localStorage.setItem('order-data', JSON.stringify(orderData))
+                return response.data
+
+               // localStorage.setItem('order-data', JSON.stringify(orderData))
             } catch (error) {
                 console.log('error', error)
             }

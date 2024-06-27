@@ -53,7 +53,7 @@ app.post('/placeorder', async (req, res) => {
         })
         res.json({
             message: 'Hello from Firebase',
-            redirectUrl: `localhost:5173/success?order_id=${successOrderId}`
+            redirectUrl: `http://localhost:5173/success?order_id=${successOrderId}`
         })
     } catch (error) {
         console.log('error', error)
