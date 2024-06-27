@@ -22,6 +22,8 @@ app.post('/placeorder', async (req, res) => {
                 const productData = productSnapshot.data()
 
                 let checkoutProduct = product
+                checkoutProduct.name = productData.name
+                checkoutProduct.imageUrl = productData.imageUrl
                 checkoutProduct.price = productData.price
                 checkoutProduct.totalPrice = productData.price * product.quantity
                 totalPrice += productData.price * product.quantity

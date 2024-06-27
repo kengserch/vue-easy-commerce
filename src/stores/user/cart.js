@@ -1,8 +1,9 @@
 import { defineStore } from 'pinia'
 
-import axios from 'axios';
+import axios from 'axios'
 
-import { ref, onValue, set } from 'firebase/database'
+import { doc, getDoc } from 'firebase/firestore'
+import { ref, onValue, set, get } from 'firebase/database'
 import { db, realtimeDB } from '@/firebase'
 
 import { useAccountStore } from '@/stores/account'
@@ -51,7 +52,6 @@ export const useCartStore = defineStore('cart', {
                     this.items = JSON.parse(previousCart)
                 }
             }
-            
         },
         async addToCart(ProductData) {
             const findProductIndex = this.items.findIndex((item) => {
@@ -81,30 +81,36 @@ export const useCartStore = defineStore('cart', {
             try {
                 const checkoutData = {
                     ...userData,
-                    products: this.items.map(product => ({
+                    products: this.items.map((product) => ({
                         productId: product.productId,
-                        quantity : product.quantity,
-                    }))
+                        quantity: product.quantity,
+                    })),
                 }
-                console.log('checkoutData',checkoutData)
+                console.log('checkoutData', checkoutData)
 
                 const response = await axios.post('/api/placeorder', {
                     source: 'test_src', //เพิ่มตอนทำ omise
-                    checkout: checkoutData
+                    checkout: checkoutData,
                 })
                 //console.log('response', response.data)
 
                 return response.data
 
-               // localStorage.setItem('order-data', JSON.stringify(orderData))
+                // localStorage.setItem('order-data', JSON.stringify(orderData))
             } catch (error) {
                 console.log('error', error)
             }
         },
-        loadCheckout() {
-            const orderData = localStorage.getItem('order-data')
-            if (orderData) {
-                this.checkout = JSON.parse(orderData)
+        async loadCheckout(orderId) {
+            try {
+                const orderRef = doc(db, 'orders', orderId)
+                const orderSnapshot = await getDoc(orderRef)
+                let orderData = orderSnapshot.data()
+                orderData.createdAt = orderData.createdAt.toDate()
+                orderData.orderNumber = orderSnapshot.id
+                return orderData
+            } catch (error) {
+                console.log('error', error)
             }
         },
     },
