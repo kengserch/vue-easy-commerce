@@ -131,7 +131,7 @@ export const useCartStore = defineStore('cart', {
                 orderData.orderNumber = orderSnapshot.id
                 return orderData
             } catch (error) {
-                throw new Error(error.message)
+                //throw new Error(error.message)
                 console.log('error', error)
             }
         },
