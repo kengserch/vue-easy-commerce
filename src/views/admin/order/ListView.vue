@@ -1,6 +1,7 @@
 <script setup>
 //config
-import {RouterLink} from 'vue-router'
+import { onMounted } from 'vue';
+import { RouterLink } from 'vue-router'
 //layout
 import AdminLayout from "@/layouts/AdminLayout.vue";
 //component
@@ -10,6 +11,9 @@ import { useAdminOrderStore } from "@/stores/admin/order";
 
 const adminOrderStore = useAdminOrderStore()
 
+onMounted( async() => {
+    await adminOrderStore.loadOrder()
+})
 
 </script>
 
@@ -20,12 +24,12 @@ const adminOrderStore = useAdminOrderStore()
         </div>
         <Table :headers="['Customer Name', 'Price', 'Status', 'UpdatedAt', '']"> 
             <tr v-for="(order,index) in adminOrderStore.list" :key="index">
-                <td>{{order.customerName}}</td>
+                <td>{{order.name}}</td>
                 <td>{{order.totalPrice}}</td>
                 <td>{{order.status}}</td>
-                <td>{{order.updatedAt}}</td>
+                <td>{{order.createdAt}}</td>
                 <td>
-                    <RouterLink :to="{name:'admin-orders-detail', params: { id: index }}" class="btn btn-outline">See detail</RouterLink>
+                    <RouterLink :to="{name:'admin-orders-detail', params: { id: order.orderId }}" class="btn btn-outline">See detail</RouterLink>
                 </td>
             </tr>
         </Table>

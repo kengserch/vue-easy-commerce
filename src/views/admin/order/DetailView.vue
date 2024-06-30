@@ -15,11 +15,11 @@ const orderData = ref({
     product: [],
 });
 
-onMounted(() => {
+onMounted( async () => {
     if (route.params.id) {
-        orderIndex.value = parseInt(route.params.id);
-        const selectedOrder = adminOrderStore.getOrder(orderIndex.value);
-        orderData.value = selectedOrder;
+        orderIndex.value = route.params.id
+        const selectedOrder = await adminOrderStore.getOrder(orderIndex.value)
+        orderData.value = selectedOrder
     }
 });
 </script>
@@ -32,11 +32,11 @@ onMounted(() => {
             <div class="grid grid-cols-2 gap-2">
                 <div>
                     <div class="font-bold">Order Date</div>
-                    <div>{{ orderData.updatedAt }}</div>
+                    <div>{{ orderData.createdAt }}</div>
                 </div>
                 <div>
                     <div class="font-bold">Order Number</div>
-                    <div>{{ orderData.no }}</div>
+                    <div>{{ orderData.orderId }}</div>
                 </div>
                 <div>
                     <div class="font-bold">Payment Method</div>
