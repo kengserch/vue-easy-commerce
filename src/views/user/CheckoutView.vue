@@ -1,5 +1,5 @@
 <script setup>
-import { reactive } from "vue";
+import { reactive} from "vue";
 import { RouterLink, useRouter } from "vue-router"
 
 import UserLayout from "@/layouts/UserLayout.vue";
@@ -48,6 +48,7 @@ const payment = async () => {
   location.href = responData.redirectUrl
   //router.push({ name: 'success' })
 }
+
 
 </script>
 

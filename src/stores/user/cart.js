@@ -3,10 +3,28 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 
 import { doc, getDoc } from 'firebase/firestore'
-import { ref, onValue, set, get } from 'firebase/database'
+import { ref, onValue, set } from 'firebase/database'
 import { db, realtimeDB } from '@/firebase'
 
 import { useAccountStore } from '@/stores/account'
+
+Omise.setPublicKey(import.meta.env.VITE_OMISE_PUBLIC_KEY);
+
+// เพื่อ function createSource
+const createSource = (amount) => {
+    return new Promise((resolve, reject) => {
+      // ทำการส่ง source ที่ต้องการจ่ายไป omise เพื่อนำ source token กลับมา
+      Omise.createSource('rabbit_linepay', {
+        amount: (amount * 100),
+        currency: 'THB'
+      }, (statusCode, response) => {
+        if (statusCode !== 200) {
+          return reject(response)
+        }
+        resolve(response)
+      })
+    })
+  }
 
 export const useCartStore = defineStore('cart', {
     state: () => ({
@@ -86,10 +104,13 @@ export const useCartStore = defineStore('cart', {
                         quantity: product.quantity,
                     })),
                 }
-                console.log('checkoutData', checkoutData)
 
+                const omiseResponse = await createSource(this.summaryPrice)
+                console.log('omiseResponse', omiseResponse)
+
+            
                 const response = await axios.post('/api/placeorder', {
-                    source: 'test_src', //เพิ่มตอนทำ omise
+                    source: omiseResponse.id, // omise source token
                     checkout: checkoutData,
                 })
                 //console.log('response', response.data)
@@ -110,6 +131,7 @@ export const useCartStore = defineStore('cart', {
                 orderData.orderNumber = orderSnapshot.id
                 return orderData
             } catch (error) {
+                throw new Error(error.message)
                 console.log('error', error)
             }
         },
