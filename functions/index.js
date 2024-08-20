@@ -4,7 +4,8 @@ const express = require('express')
 const app = express()
 
 const { db, auth, realtimeDB } = require('./firebaseConfig.js')
-const { event } = require('firebase-functions/v1/analytics')
+// const { event } = require('firebase-functions/v1/analytics')
+// const { doc } = require('firebase/firestore')
 
 const omise = require('omise')({
     secretKey: process.env.OMISE_SECRET_KEY,
@@ -17,7 +18,7 @@ const createCharge = (source, amount, orderId) => {
             {
                 amount: amount * 100,
                 currency: 'THB',
-                return_uri: `http://localhost:5173/success?order_id=${orderId}`,
+                return_uri: `${process.env.REDIRECT_URL_HOST}/success?order_id=${orderId}`,
                 metadata: {
                     orderId,
                 },
@@ -33,7 +34,7 @@ const createCharge = (source, amount, orderId) => {
     })
 }
 
-app.post('/placeorder', async (req, res) => {
+app.post('/api/placeorder', async (req, res) => {
     console.log(req.body)
     try {
         const checkoutData = req.body.checkout
@@ -131,11 +132,45 @@ app.post('/webhook', async (req, res) => {
                             })
                         }
                     })
+                    
                }
             }
         }
     } catch (error) {
         console.log('error',error)
+    }
+})
+
+app.get('/api/test', async (req,res) => {
+    try {
+        const userRef = db.collection('users')
+        const userSnapshot = await userRef.get()
+        const users = userSnapshot.docs.map(doc => doc.data())
+        res.json({
+            users
+        })
+    } catch (error) {
+        console.log('error',error)
+        res.status(400).json({
+            message: error.message
+        })
+    }
+})
+
+app.get('/set-admin', async(req,res) => {
+    try{
+        const idToken = req.headers.authorization
+        const decodedToken = await auth.verifyIdToken(idToken)
+        const userUid = decodedToken.uid
+        await auth.setCustomUserClaims(userUid, { isAdmin: true })
+        res.json({
+            message: `user uid ${userUid} is admin right now!`
+        })
+    }catch (error) {
+        console.log('error',error)
+        res.status(400).json({
+            message: error.message
+        })
     }
 })
 

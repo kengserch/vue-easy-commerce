@@ -87,7 +87,7 @@ const removeProduct = async (index) => {
         </div>
         <Table :headers="['Name', 'Image', 'Price', 'Quantity', 'Status', 'UpdatedAt', '']">
             <!-- row 1 -->
-            <tr v-for="(product, index) in adminProductStore.list" :key="index">
+            <tr v-for="(product, index) in adminProductStore.lists" :key="index">
                 <th>{{ product.name }}</th>
                 <td>
                     <img :src="product.imageUrl" class="w-24" />

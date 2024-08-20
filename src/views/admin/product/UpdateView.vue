@@ -53,7 +53,7 @@ const updateProduct = async () => {
     try {
         if (mode.value === 'EDIT') {
             await adminProductStore.updateProduct(productIndex.value, productData)
-        } else {
+        } else if (mode.value === 'ADD') {
             //console.log(productData)
             await adminProductStore.addProduct(productData)
         }
@@ -80,7 +80,6 @@ const handleFileUpload = async (event) => {
 onMounted(async () => {
     if (route.params.id) {
         mode.value = 'EDIT'
-
         productIndex.value = route.params.id
         const selectedProduct = await adminProductStore.getProduct(productIndex.value)
         // console.log('selectedProduct',selectedProduct)

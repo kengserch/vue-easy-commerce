@@ -10,6 +10,7 @@
     {
       "source": "functions",
       "codebase": "default",
+      "runtime": "nodejs18",
       "ignore": [
         "node_modules",
         ".git",
@@ -17,16 +18,21 @@
         "firebase-debug.*.log",
         "*.local"
       ]
+      
     }
   ],
   "hosting": {
-    "public": "public",
+    "public": "dist",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
     ],
     "rewrites": [
+      {
+        "source": "/api/*",
+        "function": "api"
+      },
       {
         "source": "**",
         "destination": "/index.html"

@@ -8,23 +8,27 @@ import { db, realtimeDB } from '@/firebase'
 
 import { useAccountStore } from '@/stores/account'
 
-Omise.setPublicKey(import.meta.env.VITE_OMISE_PUBLIC_KEY);
+Omise.setPublicKey(import.meta.env.VITE_OMISE_PUBLIC_KEY)
 
 // เพื่อ function createSource
 const createSource = (amount) => {
     return new Promise((resolve, reject) => {
-      // ทำการส่ง source ที่ต้องการจ่ายไป omise เพื่อนำ source token กลับมา
-      Omise.createSource('rabbit_linepay', {
-        amount: (amount * 100),
-        currency: 'THB'
-      }, (statusCode, response) => {
-        if (statusCode !== 200) {
-          return reject(response)
-        }
-        resolve(response)
-      })
+        // ทำการส่ง source ที่ต้องการจ่ายไป omise เพื่อนำ source token กลับมา
+        Omise.createSource(
+            'rabbit_linepay',
+            {
+                amount: amount * 100,
+                currency: 'THB',
+            },
+            (statusCode, response) => {
+                if (statusCode !== 200) {
+                    return reject(response)
+                }
+                resolve(response)
+            }
+        )
     })
-  }
+}
 
 export const useCartStore = defineStore('cart', {
     state: () => ({
@@ -108,7 +112,6 @@ export const useCartStore = defineStore('cart', {
                 const omiseResponse = await createSource(this.summaryPrice)
                 console.log('omiseResponse', omiseResponse)
 
-            
                 const response = await axios.post('/api/placeorder', {
                     source: omiseResponse.id, // omise source token
                     checkout: checkoutData,
@@ -129,9 +132,13 @@ export const useCartStore = defineStore('cart', {
                 let orderData = orderSnapshot.data()
                 orderData.createdAt = orderData.createdAt.toDate()
                 orderData.orderNumber = orderSnapshot.id
+                console.log('orderData', orderData)
+                if(orderData.status === 'failed'){
+                    throw new Error('Status Failed')
+                }
                 return orderData
             } catch (error) {
-                //throw new Error(error.message)
+                throw new Error(error.message)
                 console.log('error', error)
             }
         },

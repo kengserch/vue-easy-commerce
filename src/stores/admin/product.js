@@ -17,7 +17,7 @@ export const useAdminProductStore = defineStore('admin-product', {
         },
     }),
     getters: {
-        list (state) {
+        lists (state) {
             return state.docList.map((doc) => {
                 const convertedProduct = doc.data()
                 convertedProduct.productId = doc.id
@@ -74,10 +74,11 @@ export const useAdminProductStore = defineStore('admin-product', {
         },
         async addProduct(productData) {
             try {
-                updateProduct.price = parseInt(productData.price)
-                updateProduct.quantity = parseInt(productData.quantity)
+                productData.price = parseInt(productData.price)
+                productData.quantity = parseInt(productData.quantity)
                 productData.remainQuantity = parseInt(productData.quantity)
                 productData.updatedAt = new Date()
+                console.log(productData)
                 const productCol = collection(db, 'products')
                 await addDoc(productCol, productData)
             } catch (error) {

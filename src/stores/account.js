@@ -41,6 +41,9 @@ export const useAccountStore = defineStore('account', {
                         }
                         this.isLoggedIn = true
                         this.profile.email = user.email
+                        // auth เสร็จแล้ว
+                        // const idToken = await auth.currentUser.getIdToken(true)
+                        // console.log('id token',idToken)
                         resolve(true)
                     } else {
                         resolve(false)

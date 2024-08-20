@@ -18,14 +18,20 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
+
 const db = getFirestore(app)
-connectFirestoreEmulator(db, '127.0.0.1', 8080)
 const auth = getAuth(app)
-connectAuthEmulator(auth, 'http://127.0.0.1:9099')
 const storage = getStorage()
-connectStorageEmulator(storage, '127.0.0.1', 9199)
 const realtimeDB = getDatabase()
-connectDatabaseEmulator(realtimeDB, '127.0.0.1', 9000)
+
+if(import.meta.env.DEV) {
+  connectFirestoreEmulator(db, '127.0.0.1', 8080)
+  connectAuthEmulator(auth, 'http://127.0.0.1:9099')
+  connectStorageEmulator(storage, '127.0.0.1', 9199)
+  connectDatabaseEmulator(realtimeDB, '127.0.0.1', 9000)
+}
+
+
 
 
 export { db, auth, storage, realtimeDB }
