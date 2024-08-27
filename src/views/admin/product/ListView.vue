@@ -99,7 +99,7 @@ const removeProduct = async (index) => {
                         {{ product.status }}
                     </div>
                 </td>
-                <td>{{ product.updatedAt }}</td>
+                <td>{{ product.updatedAt.toLocaleDateString('th') }} {{ product.updatedAt.toLocaleTimeString() }}</td>
                 <td>
                     <div class="flex gap-2">
                         <RouterLink :to="{ name: 'admin-products-update', params: { id: product.productId } }" class="btn btn-warning">

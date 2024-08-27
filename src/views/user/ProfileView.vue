@@ -5,11 +5,13 @@ import { ref, onMounted } from 'vue'
 import UserLayout from '@/layouts/UserLayout.vue'
 //store
 import { useAccountStore } from '@/stores/account'
+import { useEventStore } from '@/stores/event.js'
 //firebase storage
 import { storage } from '@/firebase'
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage'
 
 const accountStore = useAccountStore()
+const eventStore = useEventStore()
 
 const profileImageUrl = ref()
 const email = ref('')
@@ -33,8 +35,13 @@ const updateProfile = async () => {
             fullname: fullname.value,
         }
         await accountStore.updateProfile(profileData)
+        eventStore.popupMessage('success', 'Update Profile Successful')
+        setTimeout(function () {
+            window.location.reload()
+        }, 2000)
     } catch (error) {
         console.log('error', error)
+        eventStore.popupMessage('error',error.message)
     }
 }
 

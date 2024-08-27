@@ -6,6 +6,7 @@ import { useRouter, useRoute, RouterLink } from 'vue-router'
 import AdminLayout from '@/layouts/AdminLayout.vue'
 //store
 import { useAdminProductStore } from '@/stores/admin/product'
+import { useEventStore } from '@/stores/event.js'
 //firebase storage
 import { storage } from '@/firebase'
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage'
@@ -35,6 +36,7 @@ const formData = [
 ]
 
 const adminProductStore = useAdminProductStore()
+const eventStore = useEventStore()
 const router = useRouter()
 const route = useRoute()
 
@@ -53,13 +55,20 @@ const updateProduct = async () => {
     try {
         if (mode.value === 'EDIT') {
             await adminProductStore.updateProduct(productIndex.value, productData)
+            eventStore.popupMessage('success', 'Update Product Successful')
         } else if (mode.value === 'ADD') {
             //console.log(productData)
             await adminProductStore.addProduct(productData)
+            eventStore.popupMessage('success', 'Add Product Successful')
         }
+        
+        // setTimeout(function () {
+        //     router.push({ name: 'admin-products-list' })
+        // }, 2000)
         router.push({ name: 'admin-products-list' })
     } catch (error) {
         console.log('error', error)
+        eventStore.popupMessage('error',error.message)
     }
 }
 

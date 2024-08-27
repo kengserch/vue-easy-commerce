@@ -38,7 +38,7 @@ const changeStatus = async(index) => {
                         {{ user.status }}
                     </div>
                 </td>
-                <td>{{ user.updatedAt }}</td>
+                <td>{{ user.updatedAt.toLocaleDateString('th') }} {{ user.updatedAt.toLocaleTimeString() }}</td>
                 <td>
                     <div class="flex gap-2">
                         <RouterLink :to="{ name : 'admin-users-update', params : {id : user.uid }}" class="btn btn-outline">Edit</RouterLink>

@@ -87,17 +87,17 @@ export const useCartStore = defineStore('cart', {
                 this.updateQuantity(findProductIndex, currentItem.quantity + 1)
             }
             await set(this.cartRef, this.items)
-            localStorage.setItem('cart-data', JSON.stringify(this.items))
+            //localStorage.setItem('cart-data', JSON.stringify(this.items))
         },
         async updateQuantity(index, quantity) {
             this.items[index].quantity = quantity
             await set(this.cartRef, this.items)
-            localStorage.setItem('cart-data', JSON.stringify(this.items))
+            //localStorage.setItem('cart-data', JSON.stringify(this.items))
         },
         async removeItemIncart(index) {
             this.items.splice(index, 1)
             await set(this.cartRef, this.items)
-            localStorage.setItem('cart-data', JSON.stringify(this.items))
+            //localStorage.setItem('cart-data', JSON.stringify(this.items))
         },
         async placeOrder(userData) {
             try {
@@ -133,7 +133,7 @@ export const useCartStore = defineStore('cart', {
                 orderData.createdAt = orderData.createdAt.toDate()
                 orderData.orderNumber = orderSnapshot.id
                 console.log('orderData', orderData)
-                if(orderData.status === 'failed'){
+                if (orderData.status === 'failed') {
                     throw new Error('Status Failed')
                 }
                 return orderData

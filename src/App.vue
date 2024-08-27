@@ -17,9 +17,12 @@ onMounted(() => {
 </script>
 
 <template>
-    <div v-if="eventStore.alert" class="toast">
-        <div class="alert" :class="`alert-${eventStore.data.status}`">
-            <span>{{eventStore.data.message}}</span>
+    <div v-if="eventStore.alert" class="toast toast-top toast-center">
+        <div v-if="eventStore.data.status === 'success'" class="alert alert-success">
+            <span class="text-white">{{eventStore.data.message}}</span>
+        </div>
+        <div v-if="eventStore.data.status === 'error'" class="alert alert-error">
+            <span class="text-white">{{eventStore.data.message}}</span>
         </div>
     </div>
     <RouterView />

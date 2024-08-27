@@ -17,6 +17,9 @@ coverage
 .env
 /cypress/videos/
 /cypress/screenshots/
+firebase-export
+database_export
+
 
 
 # Editor directories and files

@@ -19,7 +19,7 @@ const formData = [
         name: "Role",
         field: "role",
         type: "select",
-        dropdownList: ["admin", "moderator", "user"],
+        dropdownList: ["admin", "moderator", "member"],
     },
     {
         name: "Status",

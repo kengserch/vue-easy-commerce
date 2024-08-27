@@ -27,7 +27,7 @@ onMounted( async() => {
                 <td>{{order.name}}</td>
                 <td>{{order.totalPrice}}</td>
                 <td>{{order.status}}</td>
-                <td>{{order.createdAt}}</td>
+                <td> {{order.createdAt.toLocaleDateString('th')}} {{order.createdAt.toLocaleTimeString()}} </td>
                 <td>
                     <RouterLink :to="{name:'admin-orders-detail', params: { id: order.orderId }}" class="btn btn-outline">See detail</RouterLink>
                 </td>

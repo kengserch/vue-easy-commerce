@@ -17,11 +17,11 @@ export const useEventStore = defineStore("event", {
             })
         },
         popupMessage(status, message) {
+            this.alert = true
             this.data = {
                 status, // = status:status
                 message // = message:message
             }
-            this.alert = true
             setTimeout(()=>{
                 this.clearMessage()
             },3000)
