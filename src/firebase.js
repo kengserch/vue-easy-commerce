@@ -7,7 +7,7 @@ import { getDatabase, connectDatabaseEmulator } from 'firebase/database'
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: 'AIzaSyCNW6YHvu540nR_v25FR7n_GnLlqaaNtx0',
+  apiKey: process.env.VITE_SECURE_API_KEY,
   authDomain: 'nb-sneaker-shop.firebaseapp.com',
   databaseURL: 'https://nb-sneaker-shop-default-rtdb.asia-southeast1.firebasedatabase.app',
   projectId: 'nb-sneaker-shop',
