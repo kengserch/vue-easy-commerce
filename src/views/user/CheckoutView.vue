@@ -1,5 +1,5 @@
 <script setup>
-import { reactive } from "vue";
+import { reactive} from "vue";
 import { RouterLink, useRouter } from "vue-router"
 
 import UserLayout from "@/layouts/UserLayout.vue";
@@ -38,16 +38,17 @@ const userFormData = reactive({
   note: ''
 })
 
-const payment = () => {
+const payment = async () => {
 
-  if (userFormData.email == '' || userFormData.name == '' || userFormData.address == '') {
-    return alert("โปรดกรอกข้อมูลให้ครบ");
+  // if (userFormData.email == '' || userFormData.name == '' || userFormData.address == '') {
+  //   return alert("โปรดกรอกข้อมูลให้ครบ");
 
-  }
-
-  cartStore.placeOrder(userFormData)
-  router.push({ name: 'success' })
+  // }
+  const responData = await cartStore.placeOrder(userFormData)
+  location.href = responData.redirectUrl
+  //router.push({ name: 'success' })
 }
+
 
 </script>
 

@@ -13,9 +13,14 @@ dist
 dist-ssr
 coverage
 *.local
-
+*.production
+.env
 /cypress/videos/
 /cypress/screenshots/
+firebase-export
+database_export
+
+
 
 # Editor directories and files
 .vscode/*
