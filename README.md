@@ -1,5 +1,8 @@
 # easy-sneaker-commerce
 
+![image](https://github.com/user-attachments/assets/c94803d9-638d-4cf1-9b93-0c31990c0999)
+
+
 ### Homepage
 * Display all product
 * Add product to cart
