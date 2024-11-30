@@ -1,29 +1,35 @@
-# easy-commerce
+# easy-sneaker-commerce
+===
 
-This template should help get you started developing with Vue 3 in Vite.
+### Homepage
+* Display all product
+* Add product to cart
+![home](https://github.com/user-attachments/assets/7b5abd52-8a20-4d26-8f5d-37a313244f6e)
 
-## Recommended IDE Setup
+### Profile Page
+* Login with Google account
+* Edit profile (Image profile, Name)
+![profile](https://github.com/user-attachments/assets/531b2e2e-aeb6-4a8e-94f1-22b9906db967)
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+### Detail page
+* Display product detail
+* Add product to cart
+![product-detail](https://github.com/user-attachments/assets/466877e3-1fe2-4db1-bd8c-4e55f3874f1e)
 
-## Customize configuration
+### Cart
+* Display order summary
+* Edit quantity and delete product in cart
+![cart](https://github.com/user-attachments/assets/f5580c3e-335c-4865-b054-a7e4c96cec2c)
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+### Checkout
+* Input customer information for delivery
+![checkout](https://github.com/user-attachments/assets/535410e3-6a1f-44bf-b526-b9d720181155)
 
-## Project Setup
+### Omise Payment (TEST MODE)
+![omise payment](https://github.com/user-attachments/assets/88f98f76-f778-4034-9fde-9ac12d8841ae)
 
-```sh
-npm install
-```
+### Success payment page 
+* Summarize customer order
+![success payment](https://github.com/user-attachments/assets/b07a259a-4ca5-4f5a-91e9-41f689630d60)
 
-### Compile and Hot-Reload for Development
 
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
