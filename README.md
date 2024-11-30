@@ -1,5 +1,4 @@
 # easy-sneaker-commerce
-===
 
 ### Homepage
 * Display all product
